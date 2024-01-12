@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>1.0.0</Version>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!--<Nullable>enable</Nullable>-->
+
+        <PackageId>JsonMask.NET.ApsNetCore.Mvc.Controller.Filter</PackageId>
+        <Authors>sidec</Authors>
+        <!--<Company></Company>-->
+        <Description>
+            Mvc Controller filter to retrieve only requested json elements of a given resource. It uses JsonMask.NET.
+        </Description>
+        <PackageTags>json mask partial projection</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter</RepositoryUrl>
+        <!--<PackageReadmeFile>README.md</PackageReadmeFile>-->
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Title>JsonMask.NET.ApsNetCore.Mvc.Controller.Filter</Title>
+        <IncludeSymbols>True</IncludeSymbols>
+        <PackageIcon>assets/icon.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JsonMask.NET" Version="1.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="assets\icon.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+</Project>
