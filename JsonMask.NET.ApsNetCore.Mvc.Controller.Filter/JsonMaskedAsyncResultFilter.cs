@@ -1,16 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
+using System;
 
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
   public class JsonMaskedAsyncResultFilter : IAsyncResultFilter
   {
+
+    private readonly IMaskerService _maskerService;
+
+    public JsonMaskedAsyncResultFilter(IMaskerService maskerService)
+    {
+      _maskerService = maskerService;
+    }
+
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
       string projectionValue = null;
       Stream memoryStream = null;
       Stream originalBodyStream = context.HttpContext.Response.Body;
+      bool thereIsAttribute = false;
       try
       {
 
@@ -28,6 +38,7 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
           {
             if (context.HttpContext.Request.Query.TryGetValue(jsonMaskedAttribute.QueryParameterName, out var projectionValueStringValues))
             {
+              thereIsAttribute = true;
               // Temporary memory stream
               memoryStream = new MemoryStream();
               context.HttpContext.Response.Body = memoryStream;
@@ -41,13 +52,13 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
         //if (executedContext.Result is ObjectResult objectResult)
         //{
-        if (projectionValue != null)
+        if (projectionValue != null && thereIsAttribute)
         {
           // Modify the response here based on the projection value
           //objectResult.Value = ModifyResponse(objectResult.Value, projectionValue);
 
           // Set the memory stream position to the beginning
-          memoryStream.Seek(0, SeekOrigin.Begin);
+          memoryStream.Position = 0;
 
           // Read the memory stream into a string
           var jsonResponse = await new StreamReader(memoryStream).ReadToEndAsync();
@@ -57,7 +68,8 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
           // Write the modified response back to the original stream
           var responseBytes = Encoding.UTF8.GetBytes(modifiedResponse);
-          await originalBodyStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+          originalBodyStream.SetLength(0);
+          await originalBodyStream.WriteAsync(responseBytes);
 
           // Set the original stream back
           context.HttpContext.Response.Body = originalBodyStream;
@@ -80,7 +92,7 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
     private string ModifyResponse(string originalResponse, string projectionValue)
     {
-      var projection = Masker.Mask(originalResponse, projectionValue);
+      var projection = _maskerService.Mask(originalResponse, projectionValue);
 
       return projection;
     }
