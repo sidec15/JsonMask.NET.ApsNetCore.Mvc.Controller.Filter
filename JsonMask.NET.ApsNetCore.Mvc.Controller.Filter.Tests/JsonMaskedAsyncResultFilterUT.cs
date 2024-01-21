@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
   [TestFixture]
-  public class JsonMaskedAsyncResultFilterTests
+  public class JsonMaskedAsyncResultFilterUT
   {
     [Test]
     public async Task OnResultExecutionAsync_ModifiesResponse_WhenProjectionIsProvided()
