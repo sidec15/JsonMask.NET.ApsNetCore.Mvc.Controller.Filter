@@ -20,7 +20,6 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
       string projectionValue = null;
       Stream memoryStream = null;
       Stream originalBodyStream = context.HttpContext.Response.Body;
-      bool thereIsAttribute = false;
       try
       {
 
@@ -38,7 +37,6 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
           {
             if (context.HttpContext.Request.Query.TryGetValue(jsonMaskedAttribute.QueryParameterName, out var projectionValueStringValues))
             {
-              thereIsAttribute = true;
               // Temporary memory stream
               memoryStream = new MemoryStream();
               context.HttpContext.Response.Body = memoryStream;
@@ -52,7 +50,7 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
         //if (executedContext.Result is ObjectResult objectResult)
         //{
-        if (projectionValue != null && thereIsAttribute)
+        if (projectionValue != null)
         {
           // Modify the response here based on the projection value
           //objectResult.Value = ModifyResponse(objectResult.Value, projectionValue);

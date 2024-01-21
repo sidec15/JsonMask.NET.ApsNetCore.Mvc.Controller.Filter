@@ -22,4 +22,7 @@
     <ProjectReference Include="..\JsonMask.NET.ApsNetCore.Mvc.Controller.Filter\JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+    </ItemGroup>
 </Project>
