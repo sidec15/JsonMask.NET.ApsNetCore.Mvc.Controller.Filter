@@ -1,0 +1,34 @@
+name: tests
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "7.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      # - name: Run tests
+      #   run: dotnet test --no-build
+
+      - name: Run tests and coverage
+        run: dotnet test --settings JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Tests/code-coverage.runsettings
+      
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}        
