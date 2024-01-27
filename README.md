@@ -1,6 +1,9 @@
 
 # JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
+[![Build Status](https://github.com/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter/actions/workflows/test.yaml/badge.svg)](https://github.com/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter/actions/workflows/test.yaml)
+[![codecov](https://codecov.io/gh/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter/graph/badge.svg)](https://codecov.io/gh/sidec15/JsonMask.NET.ApsNetCore.Mvc.Controller.Filter)
+
 This ASP.NET Core MVC filter empowers developers to selectively retrieve specific JSON elements from a resource's response. Built on the robust capabilities of [JsonMask.NET](https://github.com/sidec15/JsonMask.NET), this library offers a streamlined and efficient approach to manipulating JSON responses. By leveraging query parameters, developers can easily tailor the JSON output, ensuring that clients receive only the data they need. This not only enhances the flexibility of API responses but also optimizes data transfer and processing, making it an ideal solution for scenarios where bandwidth and processing efficiency are crucial.
 
 ## Features
