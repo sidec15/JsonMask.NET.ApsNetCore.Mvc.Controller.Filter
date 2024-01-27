@@ -53,12 +53,6 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
             });
       httpContext.Request.Query = new QueryCollection(queryCollection);
 
-      // Write the original response to the memory stream
-      var writer = new StreamWriter(memoryStream);
-      writer.Write(originalResponseBody);
-      writer.Flush();
-      memoryStream.Position = 0;
-
       var expected = @"{""p1"":""k1""}";
       A.CallTo(() => maskerService.Mask(originalResponseBody, projectionValue)).Returns(expected);
 
@@ -76,7 +70,6 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
       var str = resultExecutingContext.HttpContext.Response.Body;
       str.Position = 0;
       var modifiedResponse = new StreamReader(str).ReadToEnd();
-      writer.Close();
       Assert.That(modifiedResponse, Is.EqualTo(expected));
 
     }

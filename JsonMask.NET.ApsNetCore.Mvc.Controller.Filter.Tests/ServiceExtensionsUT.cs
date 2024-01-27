@@ -17,7 +17,7 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Tests
       var services = new ServiceCollection();
 
       // Act
-      services.AddJsonMasking(lifetime);
+      services.AddJsonMask(lifetime);
 
       // Assert
       // Assert for IMaskerService
