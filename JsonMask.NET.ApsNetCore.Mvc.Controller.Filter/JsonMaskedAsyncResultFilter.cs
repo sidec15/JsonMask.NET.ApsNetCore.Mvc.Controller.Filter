@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
-using System;
 
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
@@ -48,28 +48,26 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
         // Execute the action and get the result
         var executedContext = await next();
 
-        //if (executedContext.Result is ObjectResult objectResult)
-        //{
         if (projectionValue != null)
         {
-          // Modify the response here based on the projection value
-          //objectResult.Value = ModifyResponse(objectResult.Value, projectionValue);
-
           // Set the memory stream position to the beginning
-          memoryStream.Position = 0;
+          memoryStream.Seek(0, SeekOrigin.Begin);
 
           // Read the memory stream into a string
           var jsonResponse = await new StreamReader(memoryStream).ReadToEndAsync();
 
           // Modify the response here as needed
-          var modifiedResponse = ModifyResponse(jsonResponse, projectionValue);
+          var modifiedContent = ModifyResponse(jsonResponse, projectionValue);
 
-          // Write the modified response back to the original stream
-          var responseBytes = Encoding.UTF8.GetBytes(modifiedResponse);
-          originalBodyStream.SetLength(0);
-          await originalBodyStream.WriteAsync(responseBytes);
+          // Write the modified content back to the original stream
+          var modifiedBytes = Encoding.UTF8.GetBytes(modifiedContent);
 
-          // Set the original stream back
+          // Write the modified content to the original response body
+          // Note: We do not seek the originalBodyStream because it's not supported
+          await originalBodyStream.WriteAsync(modifiedBytes, 0, modifiedBytes.Length);
+          await originalBodyStream.FlushAsync(); // Ensure all bytes are written to the original stream
+
+          // Restore the original body stream
           context.HttpContext.Response.Body = originalBodyStream;
 
         }

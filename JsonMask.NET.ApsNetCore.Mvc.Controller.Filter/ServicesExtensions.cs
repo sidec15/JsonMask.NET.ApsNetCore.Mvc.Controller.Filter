@@ -3,10 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
-  public static class ServiceExtensions
+  public static class ServicesExtensions
+
   {
 
-    public static IServiceCollection AddJsonMasking(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    public static IServiceCollection AddJsonMask(this IServiceCollection services, ServiceLifetime lifetime)
     {
       // Register the MaskerService with the specified lifetime
       services.Add(new ServiceDescriptor(typeof(IMaskerService), typeof(MaskerService), lifetime));
@@ -20,6 +21,15 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
       return services;
     }
+
+    public static IServiceCollection AddJsonMask(this IServiceCollection services)
+    {
+      // Register the MaskerService with the specified lifetime
+      services.AddJsonMask(ServiceLifetime.Scoped);
+
+      return services;
+    }
+
   }
 
 }
