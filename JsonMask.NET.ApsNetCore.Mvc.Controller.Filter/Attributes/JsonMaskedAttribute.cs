@@ -5,7 +5,7 @@
   {
     public string QueryParameterName { get; private set; }
 
-    public JsonMaskedAttribute(string queryParameterName = "projection")
+    public JsonMaskedAttribute(string queryParameterName = GlobalVariables.PROJECTION_QUERY_PARAM)
     {
       QueryParameterName = queryParameterName;
     }

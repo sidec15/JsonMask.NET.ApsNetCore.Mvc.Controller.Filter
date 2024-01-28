@@ -7,7 +7,7 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Attributes
     public bool ApplyToHttpGetOnly { get; private set; }
     public string QueryParameterName { get; private set; }
 
-    public JsonMaskedControllerAttribute(bool applyToHttpGetOnly = true, string queryParameterName = "projection")
+    public JsonMaskedControllerAttribute(bool applyToHttpGetOnly = true, string queryParameterName = GlobalVariables.PROJECTION_QUERY_PARAM)
     {
       ApplyToHttpGetOnly = applyToHttpGetOnly;
       QueryParameterName = queryParameterName;
