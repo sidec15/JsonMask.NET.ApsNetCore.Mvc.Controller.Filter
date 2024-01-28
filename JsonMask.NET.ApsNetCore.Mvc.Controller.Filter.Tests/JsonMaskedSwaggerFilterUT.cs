@@ -6,6 +6,7 @@ using JsonMask.NET.ApsNetCore.Mvc.Controller.Filter;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using System.Xml.Linq;
+using JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Attributes;
 
 namespace JsonMask.NET.ApsNetCore.Controller.Filter.Mvc.Tests
 {

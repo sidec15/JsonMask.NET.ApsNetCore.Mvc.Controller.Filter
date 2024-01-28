@@ -1,9 +1,10 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Attributes;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
-  public class JsonMaskedSwaggerFilter : IOperationFilter
+    public class JsonMaskedSwaggerFilter : IOperationFilter
   {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {

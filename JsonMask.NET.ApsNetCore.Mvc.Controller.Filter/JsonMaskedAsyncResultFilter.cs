@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using JsonMask.NET.ApsNetCore.Mvc.Controller.Filter.Attributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text;
 
 namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 {
-  public class JsonMaskedAsyncResultFilter : IAsyncResultFilter
+    public class JsonMaskedAsyncResultFilter : IAsyncResultFilter
   {
 
     private readonly IMaskerService _maskerService;
@@ -25,7 +26,12 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
 
         if (context.Controller is ControllerBase controller)
         {
-          var jsonMaskedAttribute = controller
+          var controllerAttribute = context.Controller
+            .GetType()
+            .GetCustomAttributes(typeof(JsonMaskedControllerAttribute), true)
+            .FirstOrDefault() as JsonMaskedControllerAttribute;
+
+          var methodAttribute = controller
             .ControllerContext
             .ActionDescriptor
             .MethodInfo
@@ -33,16 +39,41 @@ namespace JsonMask.NET.ApsNetCore.Mvc.Controller.Filter
             .OfType<JsonMaskedAttribute>()
             .FirstOrDefault();
 
-          if (jsonMaskedAttribute != null)
+          bool shouldApplyFilter = methodAttribute != null ||
+                                 (controllerAttribute != null &&
+                                 (controllerAttribute.ApplyToHttpGetOnly == false ||
+                                  context.HttpContext.Request.Method == "GET"));
+
+
+          if (shouldApplyFilter)
           {
-            if (context.HttpContext.Request.Query.TryGetValue(jsonMaskedAttribute.QueryParameterName, out var projectionValueStringValues))
+
+            // get projection value
+            if(methodAttribute != null)
             {
-              // Temporary memory stream
-              memoryStream = new MemoryStream();
-              context.HttpContext.Response.Body = memoryStream;
-              projectionValue = projectionValueStringValues;
+              if (context.HttpContext.Request.Query.TryGetValue(methodAttribute.QueryParameterName, out var projectionValueStringValues))
+              {
+                projectionValue = projectionValueStringValues;
+              }
+            }
+            if(projectionValue == null)
+            {
+              if (controllerAttribute != null)
+              {
+                if (context.HttpContext.Request.Query.TryGetValue(controllerAttribute.QueryParameterName, out var projectionValueStringValues))
+                {
+                  projectionValue = projectionValueStringValues;
+                }
+              }
             }
           }
+        }
+
+        if(projectionValue != null)
+        {
+          // Temporary memory stream
+          memoryStream = new MemoryStream();
+          context.HttpContext.Response.Body = memoryStream;
         }
 
         // Execute the action and get the result
